@@ -1,0 +1,17 @@
+.fin-img{
+    margin-top: 22px;
+    width: 200px;
+    height: auto;
+    max-height: 230px;
+}
+
+#main-img{
+    margin: 3px 25%;
+    display: inline-block;
+}
+
+@media (min-width: 992px) { 
+    #main-img{
+        margin: 3px 10%;
+    }
+ }
