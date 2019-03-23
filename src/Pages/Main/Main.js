@@ -24,7 +24,8 @@ export default class Main extends Component{
             listening: false,
             data: [],
             sentence: '',
-            loading: false
+            loading: false,
+            steps: ''
         }
     }
 
@@ -65,7 +66,6 @@ export default class Main extends Component{
             for (var i = event.resultIndex; i < event.results.length; ++i) {      
                 if (event.results[i].isFinal) { //Final results
                     this.setState({sentence: event.results[i][0].transcript, loading: true}, () => {
-                        console.log(this.state)
                         fetch('https://aarya-api.herokuapp.com/rakeit',{
                             method: 'post',
                             headers: {'Content-type':'application/json'},
@@ -75,7 +75,8 @@ export default class Main extends Component{
                         })
                         .then(response => response.json())
                         .then(data => {
-                            this.setState({data: data})
+                            console.log(data)
+                            this.setState({data: data.data, steps: data.steps})
                         })
                     })
                     this.setState({loading: false}) 
@@ -93,11 +94,25 @@ export default class Main extends Component{
     render(){
         
         if (typeof(this.state.data) === 'object' && this.state.data.length){
-            var rows = this.state.data.map((obj,i) => {
-                return(
-                    <Card link={obj.image_url} word={obj.search_word}/>
-                );
-            })
+
+            if (this.state.steps) {
+
+                var rows = this.state.data.map((obj,i) => {
+                    return(
+                        <Card link={obj} word={"Step "+i}/>
+                    );
+                })
+
+            }
+
+            else {
+
+                var rows = this.state.data.map((obj,i) => {
+                    return(
+                        <Card link={obj.image_url} word={obj.search_word}/>
+                    );
+                })
+            }
 
         }
 
