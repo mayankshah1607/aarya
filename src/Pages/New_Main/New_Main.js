@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './Main.css';
+import './New_Main.css';
 import Card from '../../Components/Card/Card';
-
 
 if (!('webkitSpeechRecognition' in window)) {
     alert('Voice recognition not supported on your device')
@@ -15,37 +14,21 @@ if (!('webkitSpeechRecognition' in window)) {
     console.log('Speech set up!')
 }
 
-export default class Main extends Component{
-
+export default class New_Main extends Component{
     constructor(){
         super()
         this.state = {
-            listening: false,
-            data: [],
             sentence: '',
-            loading: false,
-            steps: ''
+            data: [],
+            steps: '',
+            loading_text: 'Setting things up...'
         }
     }
 
-    listenToggle = () => {
-        this.setState({listening: !this.state.listening}, () => {
-            if (this.state.listening) {
-                document.getElementById('listen-btn-trans').id = 'listen-btn-white'
-                this.startRecord();
-            }
-    
-            else{
-                document.getElementById('listen-btn-white').id = 'listen-btn-trans'
-                this.endRecord();
-            }
-
-        })
-    }
-
-    startRecord(){
+    startRecord = () => {
+        console.log('Started')
         this.setState({
-            listening: true, data: ''
+            listening: true,loading_text: 'Listening...'
         },() => {
             recognition.start()
         })
@@ -53,6 +36,7 @@ export default class Main extends Component{
     }
 
     endRecord(){
+        console.log('Ended')
         this.setState({
             listening: false
         },() => {
@@ -60,7 +44,7 @@ export default class Main extends Component{
         })
     }
 
-    initializeVoice(){
+    onListening(){
         recognition.onresult = (event) => {
             for (var i = event.resultIndex; i < event.results.length; ++i) {      
                 if (event.results[i].isFinal) { //Final results
@@ -74,31 +58,48 @@ export default class Main extends Component{
                         })
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data)
+                            console.log(this.state)
                             this.setState({data: data.data, steps: data.steps})
                         })
                     })
                     this.setState({loading: false}) 
                 } else {   //i.e. interim...
-                    // console.log("interim results: " + event.results[i][0].transcript);  //You can use these results to give the user near real time experience.
+                    this.setState({sentence: event.results[i][0].transcript}) 
                 }
             } 
         }
-        
     }
 
     componentDidMount(){
-        this.initializeVoice();
+        this.onListening();
+
+        this.startRecord();
+        setTimeout(function(){
+            this.endRecord();
+        }
+        .bind(this)
+        ,5000)
+
+        setInterval(function(){
+            this.startRecord()
+            setTimeout(function(){
+                this.endRecord();
+            }
+            .bind(this)
+            ,5000)
+        }
+        .bind(this)
+        ,12000)
+
     }
     render(){
-        
         if (typeof(this.state.data) === 'object' && this.state.data.length){
 
             if (this.state.steps) {
 
                 var rows = this.state.data.map((obj,i) => {
                     return(
-                        <Card link={obj} word={"Step "+i}/>
+                        <Card friendly={true} link={obj} word={"Step "+(i+1)}/>
                     );
                 })
 
@@ -108,61 +109,43 @@ export default class Main extends Component{
 
                 var rows = this.state.data.map((obj,i) => {
                     return(
-                        <Card link={obj.image_url} word={obj.search_word}/>
+                        <Card friendly={obj.friendly} link={obj.image_url} word={obj.search_word}/>
                     );
                 })
             }
         }
 
-
-
-
         return(
-            <div id='main'>
-                <div id='main-stuff'>
+        <div id='new_main'>
+            
+            <div id='img-view'>
+                {
+                    this.state.data.length ? 
                     <div>
-                        <div onClick={this.listenToggle} id='listen-btn-trans'>
+                        <p style={{
+                            "color" :"#fff",
+                            "fontSize" : "18px"
+                        }}><i>Follow the sequence...</i></p>
+                        <div id='img-holder'>
+                            {rows}   
                         </div>
                     </div>
-                    {
-                        this.state.listening ? 
-                        <p id='help-text'>Listening...</p>
-                        :
-                        <p id='help-text'>Tap the icon to begin</p>
-                    }
-                    
-                </div>
-                <div id='img-col'>
-                    <div id='img-display'>
-                    
+                    :
+                    null
+                }
 
-                    {
-                        this.state.loading ?
-                        <p id='help-text2'>Fetching...</p>
-                        :
-                            this.state.listening ?
-                            
-                                <p id='trying-text'>Trying to get results for you...</p>
-                                    :
-                                this.state.data.length ? 
-                                <div>
-                                        <h4 style={{
-                                            "fontWeight" :"100"
-                                        }}><i>Follow the sequence below...</i></h4>
-                                        <div id='img-holder'>
-
-                                        {rows}
-                                        
-                                        </div>
-                                </div>
-                            :
-                            <p id='help-text2'>Results will be displayed here</p>
-                    }
-                        
-
-                    </div>
-                </div>
             </div>
+
+            <div id='text-view'>
+                {
+                    this.state.sentence.length?
+                    <p id='text-main'>{this.state.sentence}</p>
+                    :
+                    <p id='text-loading'>{this.state.loading_text}</p>
+                }
+            </div>
+        </div>
+
         );
     }
 }

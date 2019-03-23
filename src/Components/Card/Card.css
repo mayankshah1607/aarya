@@ -10,6 +10,11 @@
     display: inline-block;
 }
 
+#word{
+    font-weight: bold;
+    font-size: 14px;
+}
+
 @media (min-width: 992px) { 
     #main-img{
         margin: 3px 10%;

@@ -5,21 +5,28 @@ export default class Card extends Component{
     constructor(props){
         super(props);
     }
+
+    componentDidMount(){
+        console.log(this.props.friendly)
+    }
     render(){
-        // const rows = this.props.data.map((obj,i) => {
-        //     return(
-        //         <tr>
-        //             <td>{i+1}</td>
-        //             <td>{obj.TeamName}</td>
-        //             <td>{obj.CurQuestion-1}</td>
-        //             <td>{obj.Points}</td>
-        //         </tr>
-        //     );
-        // })
+
         return(
             <div id='main-img'>
-                <img href='https://google.com' className='fin-img' alt='image' src={this.props.link}/>
-                <p>{this.props.word}</p>
+                <div style={{
+                    "backgroundColor" :"white",
+                    "padding" :"24px",
+                    "borderRadius" :"12px"
+                }}>
+                    {
+                        this.props.friendly? 
+                        <img className='fin-img' alt='image' src={this.props.link}/>
+                        :
+                        <p>Content has been censored</p>
+                    }
+                    
+                    <p id='word'>{this.props.word}</p>
+                </div>
             </div>
         );
     }
