@@ -98,9 +98,12 @@ export default class New_Main extends Component{
             if (this.state.steps) {
 
                 var rows = this.state.data.map((obj,i) => {
-                    return(
-                        <Card friendly={true} link={obj} word={"Step "+(i+1)}/>
-                    );
+                    if (obj !== null ){
+
+                        return(
+                            <Card friendly={true} link={obj} word={"Step "+(i+1)}/>
+                        );
+                    }
                 })
 
             }
@@ -109,8 +112,10 @@ export default class New_Main extends Component{
 
                 var rows = this.state.data.map((obj,i) => {
                     if (obj.image_url !== null) {
+                        return(
 
-
+                            <Card link={obj.image_url} word={obj.search_word} friendly={obj.friendly} />
+                        );
                     }
                 })
             }
