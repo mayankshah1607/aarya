@@ -130,11 +130,19 @@ export default class New_Main extends Component{
                     <div>
                         <p style={{
                             "color" :"#fff",
-                            "fontSize" : "18px"
-                        }}><i>Follow the sequence...</i></p>
+                            "fontSize" : "18px",
+                            "marginTop" :"14px"
+                        }}><strong>Follow the sequence...</strong></p>
                         <div id='img-holder'>
                             {rows}   
                         </div>
+                        <br/>
+                        <br/>
+                        <p style={{
+                            "textAlign" :"center",
+                            "color" :"#fff",
+                            "marginTop" :"4px"
+                        }}><i>Swipe to view more</i></p>
                     </div>
                     :
                     null
