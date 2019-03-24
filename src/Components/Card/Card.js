@@ -7,7 +7,7 @@ export default class Card extends Component{
     }
 
     componentDidMount(){
-        console.log(this.props.friendly)
+        console.log(this.props.link)
     }
     render(){
 

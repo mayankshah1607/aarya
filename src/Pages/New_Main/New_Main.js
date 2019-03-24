@@ -108,9 +108,10 @@ export default class New_Main extends Component{
             else {
 
                 var rows = this.state.data.map((obj,i) => {
-                    return(
-                        <Card friendly={obj.friendly} link={obj.image_url} word={obj.search_word}/>
-                    );
+                    if (obj.image_url !== null) {
+
+
+                    }
                 })
             }
         }
