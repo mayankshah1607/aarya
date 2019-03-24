@@ -86,10 +86,10 @@ export default class New_Main extends Component{
                 this.endRecord();
             }
             .bind(this)
-            ,5000)
+            ,8000)
         }
         .bind(this)
-        ,12000)
+        ,15000)
 
     }
     render(){
