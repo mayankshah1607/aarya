@@ -16,7 +16,8 @@ export default class Card extends Component{
                 <div style={{
                     "backgroundColor" :"white",
                     "padding" :"24px",
-                    "borderRadius" :"12px"
+                    "borderRadius" :"12px",
+                    "boxShadow" :"0 0 10px #efefef"
                 }}>
                     {
                         this.props.friendly? 
